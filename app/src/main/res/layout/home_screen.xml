@@ -17,15 +17,14 @@
             android:layout_weight="1"
             app:srcCompat="@mipmap/ic_launcher" />
 
-        <TextView
-            android:id="@+id/counterTextView"
+        <Chronometer
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:id="@+id/chronometer"
+            android:textSize="24sp"
             android:fontFamily="@font/roboto_medium"
-            android:text="00:00"
-            android:textAlignment="center"
-            android:textSize="24sp" />
+            android:layout_centerHorizontal="true"
+            />
 
         <Button
             android:id="@+id/recordButton"
@@ -38,10 +37,15 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/notificationTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="List of recorder audio"
         android:textAlignment="center"
         android:textSize="30sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/audioRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
