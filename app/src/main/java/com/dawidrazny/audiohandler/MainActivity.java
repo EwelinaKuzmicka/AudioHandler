@@ -1,5 +1,6 @@
 package com.dawidrazny.audiohandler;
 
+import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,8 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
     // Time variables
     private Boolean isRecording = false;
-
     int ChronometerTickCounter = 0;
+
+    // file data variables
+    String recordLenght = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void onRecord(boolean event)
     {
+        // initialization of Recording Service
+        Intent intent = new Intent( this.getApplicationContext(), audioRecordService.class);
 
         //record
         if(!event)
@@ -68,19 +75,26 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            //trigering recording event
+            // Trigering recording event
             isRecording = true;
+
+            startService(intent);
         }
         // stop recording
         else if(event)
         {
-            Toast.makeText(this, "Recording stoped!" + mChronometer.getText().toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Recording stoped!", Toast.LENGTH_LONG).show();
+
+            recordLenght = mChronometer.getText().toString();
 
             mChronometer.stop();
             mChronometer.setBase(SystemClock.elapsedRealtime());
+
+            mNotificationTextView.setText("Recording finished.");
 
             //trigering recording event
             isRecording = false;
         }
     }
+
 }
