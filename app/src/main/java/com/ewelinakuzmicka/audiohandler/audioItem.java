@@ -1,6 +1,4 @@
-package com.dawidrazny.audiohandler;
-
-import android.widget.Toast;
+package com.ewelinakuzmicka.audiohandler;
 
 public class audioItem
 {
