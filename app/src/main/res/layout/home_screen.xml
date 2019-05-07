@@ -55,9 +55,17 @@
         android:textAlignment="center"
         android:textSize="30sp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/audioRecyclerView"
+    <Button
+        android:id="@+id/refreshButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#00C22626" />
+        android:text="Refresh" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/audioRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00C22626" />
+
 </LinearLayout>

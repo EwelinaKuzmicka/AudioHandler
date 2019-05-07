@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.os.FileObserver;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     // Layout elements declarations
     private Button mRecordButton;
     private TextView mNotificationTextView;
+    private Button refreshButton;
     private Chronometer mChronometer;
     private RecyclerView mAudioRecyclerView;
 
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         // home screen layout elements binding
         mRecordButton = (Button) findViewById(R.id.recordButton);
         mNotificationTextView = (TextView) findViewById(R.id.notificationTextView);
+        refreshButton = (Button) findViewById(R.id.refreshButton);
         mChronometer = (Chronometer) findViewById(R.id.chronometer);
 
         // RecyclerViewer adapter
@@ -81,6 +84,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onRecord(isRecording);
+            }
+        });
+
+        refreshButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                mFileList.clear();
+                prepareFileListData();
             }
         });
 
