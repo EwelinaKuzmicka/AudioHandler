@@ -20,6 +20,9 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     int ChronometerTickCounter = 0;
 
     // file data variables
+    String audioPath = Environment.getExternalStorageDirectory().toString()+"/AudioHandler";
     String recordLenght = "";
 
     // Audio List Variables
@@ -82,10 +86,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void prepareFileListData()
     {
-        fileItem fileItem = new fileItem("1", "File name","jakis folderek");
-        mFileList.add(fileItem);
 
-        mAudioListAdapter.notifyDataSetChanged();
+        File directory = new File(audioPath);
+        final File[] sortedByDate = directory.listFiles();
+
+        if (sortedByDate != null && sortedByDate.length > 1)
+        {
+            Arrays.sort(sortedByDate,  new Comparator<File>()
+            {
+                public int compare(File f1, File f2)
+                {
+                    return -Long.compare(f1.lastModified(), f2.lastModified());
+                }
+            });
+        }
+
+        for (int i = 0; i < sortedByDate.length; i++)
+        {
+
+            fileItem fileItem = new fileItem( Integer.toString(i) , sortedByDate[i].getName() ,sortedByDate[i].getPath() );
+            mFileList.add(fileItem);
+
+            Log.d("Files", "FileName:" + sortedByDate[i].getName());
+
+            mAudioListAdapter.notifyDataSetChanged();
+        }
     }
 
     private void onRecord(boolean event)
@@ -99,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Recording started!", Toast.LENGTH_SHORT).show();
 
             // Create folder for keeping audio files
-            File audioFolder = new File(Environment.getExternalStorageDirectory() + "/AudioHandler");
+            File audioFolder = new File(audioPath);
             if (!audioFolder.exists())
             {
                 Toast.makeText(this, "Folder created! ", Toast.LENGTH_SHORT).show();
