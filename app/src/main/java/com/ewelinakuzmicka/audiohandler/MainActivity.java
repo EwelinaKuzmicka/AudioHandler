@@ -2,6 +2,7 @@ package com.ewelinakuzmicka.audiohandler;
 
 import android.content.Intent;
 import android.graphics.Movie;
+import android.media.MediaMetadataRetriever;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.os.SystemClock;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -69,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         // Add Adapter to Recycle viewer
         mAudioListAdapter = new audioListAdapter(this, llm, mFileList);
         mAudioRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAudioRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         mAudioRecyclerView.setAdapter(mAudioListAdapter);
-
 
         prepareFileListData();
 
@@ -104,13 +106,46 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < sortedByDate.length; i++)
         {
 
-            fileItem fileItem = new fileItem( Integer.toString(i) , sortedByDate[i].getName() ,sortedByDate[i].getPath() );
+            fileItem fileItem = new fileItem( Integer.toString(sortedByDate.length-i) , sortedByDate[i].getName() , sortedByDate[i].getPath(), getFileDuration(sortedByDate[i]) );
             mFileList.add(fileItem);
 
             Log.d("Files", "FileName:" + sortedByDate[i].getName());
 
             mAudioListAdapter.notifyDataSetChanged();
         }
+    }
+
+    private static String getFileDuration(File file)
+    {
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource(file.getAbsolutePath());
+        String durationStr = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        return formatMilliSeccond(Long.parseLong(durationStr));
+    }
+
+    public static String formatMilliSeccond(long milliseconds)
+    {
+        String finalTimerString = "";
+        String secondsString = "";
+
+        // Convert total duration into time
+        int hours = (int) (milliseconds / (1000 * 60 * 60));
+        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+
+        if (hours > 0) {
+            finalTimerString = hours + ":";
+        }
+
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+
+        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        return finalTimerString;
     }
 
     private void onRecord(boolean event)
