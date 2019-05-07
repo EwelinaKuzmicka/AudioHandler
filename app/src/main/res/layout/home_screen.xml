@@ -5,6 +5,16 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/notificationTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="15dp"
+        android:text="Press start to start recording."
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,15 +47,17 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/notificationTextView"
+        android:id="@+id/listTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="List of recorder audio"
+        android:padding="15dp"
+        android:text="List of recorded audio"
         android:textAlignment="center"
         android:textSize="30sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/audioRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="#00C22626" />
 </LinearLayout>

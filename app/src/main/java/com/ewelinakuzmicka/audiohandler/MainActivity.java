@@ -1,10 +1,17 @@
 package com.ewelinakuzmicka.audiohandler;
 
 import android.content.Intent;
+import android.graphics.Movie;
 import android.os.Environment;
+import android.os.FileObserver;
 import android.os.SystemClock;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -12,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mRecordButton;
     private TextView mNotificationTextView;
     private Chronometer mChronometer;
+    private RecyclerView mAudioRecyclerView;
 
     // Time variables
     private Boolean isRecording = false;
@@ -26,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
     // file data variables
     String recordLenght = "";
+
+    // Audio List Variables
+    audioListAdapter mAudioListAdapter;
+    private List<fileItem> mFileList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +51,25 @@ public class MainActivity extends AppCompatActivity {
         mNotificationTextView = (TextView) findViewById(R.id.notificationTextView);
         mChronometer = (Chronometer) findViewById(R.id.chronometer);
 
+        // RecyclerViewer adapter
+        mAudioRecyclerView = (RecyclerView) findViewById(R.id.audioRecyclerView);
+        mAudioRecyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        llm.setReverseLayout(true);
+        llm.setStackFromEnd(true);
+
+        mAudioRecyclerView.setLayoutManager(llm);
+
+        // Add Adapter to Recycle viewer
+        mAudioListAdapter = new audioListAdapter(this, llm, mFileList);
+        mAudioRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAudioRecyclerView.setAdapter(mAudioListAdapter);
+
+
+        prepareFileListData();
+
         // Record Button events ( start & record, pause and stop )
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
                 onRecord(isRecording);
             }
         });
+
+    }
+
+    private void prepareFileListData()
+    {
+        fileItem fileItem = new fileItem("1", "File name","jakis folderek");
+        mFileList.add(fileItem);
+
+        mAudioListAdapter.notifyDataSetChanged();
     }
 
     private void onRecord(boolean event)
@@ -71,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
             mChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener()
             {
                 @Override
-                public void onChronometerTick(Chronometer chronometer) {
+                public void onChronometerTick(Chronometer chronometer)
+                {
                     if (ChronometerTickCounter == 0) {
                         mNotificationTextView.setText("Recording.");
                     } else if (ChronometerTickCounter == 1) {
@@ -108,5 +151,8 @@ public class MainActivity extends AppCompatActivity {
             stopService(intent);
         }
     }
+
+    // Finding files and attaching them to Recycle view
+
 
 }
