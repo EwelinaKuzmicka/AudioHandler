@@ -62,10 +62,10 @@
         android:text="Refresh" />
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/audioRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#00C22626" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/audioRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00C22626" />
 
 </LinearLayout>

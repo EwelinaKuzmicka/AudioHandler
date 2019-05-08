@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         mAudioRecyclerView.setLayoutManager(llm);
 
         // Add Adapter to Recycle viewer
-        mAudioListAdapter = new audioListAdapter(this, llm, mFileList);
+        mAudioListAdapter = new audioListAdapter(this, llm, mFileList, MainActivity.this);
         mAudioRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAudioRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         mAudioRecyclerView.setAdapter(mAudioListAdapter);
@@ -119,13 +119,22 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < sortedByDate.length; i++)
         {
 
-            fileItem fileItem = new fileItem( Integer.toString(sortedByDate.length-i) , sortedByDate[i].getName() , sortedByDate[i].getPath(), getFileDuration(sortedByDate[i]) );
+            fileItem fileItem = new fileItem( Integer.toString(sortedByDate.length-i) , sortedByDate[i].getName() , sortedByDate[i].getPath(), getFileDuration(sortedByDate[i]), getFileDurationMili(sortedByDate[i]) );
+
             mFileList.add(fileItem);
 
             Log.d("Files", "FileName:" + sortedByDate[i].getName());
 
             mAudioListAdapter.notifyDataSetChanged();
         }
+    }
+
+    private static int getFileDurationMili(File file)
+    {
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource(file.getAbsolutePath());
+        String durationStr = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        return Integer.parseInt(durationStr);
     }
 
     private static String getFileDuration(File file)

@@ -1,21 +1,15 @@
 package com.ewelinakuzmicka.audiohandler;
 
+import android.app.Activity;
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class audioListAdapter extends RecyclerView.Adapter<audioListAdapter.audioElementView>
@@ -23,9 +17,7 @@ public class audioListAdapter extends RecyclerView.Adapter<audioListAdapter.audi
     Context mContext;
     LinearLayoutManager llm;
     private List<fileItem> mFileList;
-
-    //play / pause
-    private MediaPlayer mMediaPlayer;
+    private Activity mActivity;
 
 
     public static class audioElementView extends RecyclerView.ViewHolder
@@ -33,7 +25,7 @@ public class audioListAdapter extends RecyclerView.Adapter<audioListAdapter.audi
         protected TextView vName;
         private TextView vID;
         private TextView vDuration;
-        private Button vPlayButton;
+        private LinearLayout vListElement;
 
         protected int vPosition;
 
@@ -46,17 +38,17 @@ public class audioListAdapter extends RecyclerView.Adapter<audioListAdapter.audi
             vName = (TextView) v.findViewById(R.id.audioNameTextView);
             vID = (TextView) v.findViewById(R.id.audioIdTextView);
             vDuration = (TextView) v.findViewById(R.id.audioDurationTextView);
-            vPlayButton = (Button) v.findViewById(R.id.playButton);
-
+            vListElement = (LinearLayout) v.findViewById(R.id.list_element);
         }
     }
 
 
-    public audioListAdapter(Context context, LinearLayoutManager linearLayoutManager,List<fileItem> fileList)
+    public audioListAdapter(Context context, LinearLayoutManager linearLayoutManager, List<fileItem> fileList, Activity activity)
     {
         mContext = context;
         llm = linearLayoutManager;
         this.mFileList = fileList;
+        this.mActivity = activity;
     }
 
 
@@ -71,7 +63,7 @@ public class audioListAdapter extends RecyclerView.Adapter<audioListAdapter.audi
     }
 
     @Override
-    public void onBindViewHolder(audioElementView audioElementView, int i)
+    public void onBindViewHolder(final audioElementView audioElementView, int i)
     {
         final fileItem fileItem = mFileList.get(i);
 
@@ -79,11 +71,13 @@ public class audioListAdapter extends RecyclerView.Adapter<audioListAdapter.audi
         audioElementView.vName.setText(fileItem.getFileName());
         audioElementView.vDuration.setText(fileItem.getFileDuration());
 
-        audioElementView.vPlayButton.setOnClickListener(new View.OnClickListener()
+        audioElementView.vListElement.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
-                startPlaying(fileItem.getFilePath());
+            public void onClick(View v)
+            {
+                playDialog playDialog = new playDialog(mActivity, fileItem);
+                playDialog.show();
             }
         });
     }
@@ -92,48 +86,6 @@ public class audioListAdapter extends RecyclerView.Adapter<audioListAdapter.audi
     public int getItemCount()
     {
         return mFileList.size();
-    }
-
-    private void startPlaying(String filePath)
-    {
-        if (mMediaPlayer != null)
-        {
-            stopPlaying();
-        }
-
-        mMediaPlayer = new MediaPlayer();
-
-        try {
-            mMediaPlayer.setDataSource(filePath);
-            mMediaPlayer.prepare();
-
-            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener()
-            {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mMediaPlayer.start();
-                }
-            });
-        } catch (IOException e)
-        {
-            Log.e("audioListAdapter", "Process failed");
-        }
-
-        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener()
-        {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                stopPlaying();
-            }
-        });
-    }
-
-    private void stopPlaying()
-    {
-        mMediaPlayer.stop();
-        mMediaPlayer.reset();
-        mMediaPlayer.release();
-        mMediaPlayer = null;
     }
 
 }
