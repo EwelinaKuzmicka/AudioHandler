@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +32,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     // Layout elements declarations
-    private Button mRecordButton;
+    private ImageView mRecordButton;
     private TextView mNotificationTextView;
-    private Button refreshButton;
+    private ImageView refreshButton;
     private Chronometer mChronometer;
     private RecyclerView mAudioRecyclerView;
 
@@ -55,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.home_screen);
 
         // home screen layout elements binding
-        mRecordButton = (Button) findViewById(R.id.recordButton);
+        mRecordButton = (ImageView) findViewById(R.id.recordButton);
         mNotificationTextView = (TextView) findViewById(R.id.notificationTextView);
-        refreshButton = (Button) findViewById(R.id.refreshButton);
+        refreshButton = (ImageView) findViewById(R.id.refreshButton);
         mChronometer = (Chronometer) findViewById(R.id.chronometer);
 
         // RecyclerViewer adapter

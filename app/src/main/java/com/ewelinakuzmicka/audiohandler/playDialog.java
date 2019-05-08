@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class playDialog extends Dialog implements android.view.View.OnClickListener
 {
     public Activity mActivity;
-    private Button vPlayButton;
-    private Button vStopButton;
+    private ImageView vPlayButton;
+    private ImageView vStopButton;
     private TextView vAudioTitleTextView;
     private TextView vCurrentTimeTextView;
     private TextView vDurationTextView;
@@ -62,10 +63,10 @@ public class playDialog extends Dialog implements android.view.View.OnClickListe
         vCurrentTimeTextView = (TextView) findViewById(R.id.currentTimeTextView);
         vDurationTextView = (TextView) findViewById(R.id.durationTextView);
 
-        vPlayButton = (Button) findViewById(R.id.playButton);
+        vPlayButton = (ImageView) findViewById(R.id.playButton);
         vPlayButton.setOnClickListener(this);
 
-        vStopButton = (Button) findViewById(R.id.stopButton);
+        vStopButton = (ImageView) findViewById(R.id.stopButton);
         vStopButton.setOnClickListener(this);
 
         vAudioProgressBar = (ProgressBar) findViewById(R.id.audioProgressBar);
