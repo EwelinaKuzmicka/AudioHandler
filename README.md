@@ -9,4 +9,4 @@ Całość projektu została wykonana w programie Android Studio.
 
 
 Android Aplication full interface preview
-![alt text](https://github.com/EwelinaKuzmicka/AudioHandler/tree/master/ReadmeImages/appBundle.png)
+![alt text](https://github.com/EwelinaKuzmicka/AudioHandler/blob/master/ReadmeImages/appBundle.png)
